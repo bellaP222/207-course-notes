@@ -46,7 +46,7 @@ public class Point {
    */
   @Override
   public String toString() {
-    return "(" + this.getX() + "," + this.getY() + ")";
+    return "(" + this.getX() + ", " + this.getY() + ")";
   }
 
   /**
@@ -65,9 +65,9 @@ public class Point {
     }
     if (!(o instanceof Point)) {
       return false;
-    Point p = (Point) o;  // not really an error, compiler would reject if not casted
-    return p.getX() == this.getX() && p.getY() == this.getY();
     }
+    Point p = (Point) o;  // not really an error, compiler would reject if not casted
+    return (p.getX() == this.getX()) && (p.getY() == this.getY());
   }
 
   /**
@@ -78,7 +78,6 @@ public class Point {
    */
   @Override
   public int hashCode() {
-    // TODO: Objects.hash(x, y) is an easy way to combine the fields.
-    return 0;
+    return Objects.hash(x, y);
   }
 }
