@@ -46,8 +46,7 @@ public class Point {
    */
   @Override
   public String toString() {
-    // TODO
-    return "";
+    return "(" + this.getX() + "," + this.getY() + ")";
   }
 
   /**
@@ -58,9 +57,17 @@ public class Point {
    */
   @Override
   public boolean equals(Object o) {
-    // TODO: check that o is a Point (use `instanceof`), cast it, and compare
-    //       the x and y fields.
-    return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null) {
+      return false;
+    }
+    if (!(o instanceof Point)) {
+      return false;
+    Point p = (Point) o;  // not really an error, compiler would reject if not casted
+    return p.getX() == this.getX() && p.getY() == this.getY();
+    }
   }
 
   /**
