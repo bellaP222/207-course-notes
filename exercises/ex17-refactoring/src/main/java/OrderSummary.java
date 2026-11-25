@@ -43,7 +43,7 @@ import java.util.Locale;
  */
 public class OrderSummary {
 
-  /**
+    /**
    * Builds a human-readable, multi-line summary of an order.
    *
    * <p>An order gets a 10% discount when its subtotal is more than $200, and tax
@@ -72,23 +72,25 @@ public class OrderSummary {
       }
     }
 
-    // TODO: replace the magic numbers below with named constants.
-    if (subtotal > 200.0) {
-      discount = subtotal * 0.10;
+    int DISCOUNT_MIN = 200;
+    double DISCOUNT = 0.10;
+    if (subtotal > DISCOUNT_MIN) {
+      discount = subtotal * DISCOUNT;
     }
+    double TAX = 0.13;
     double taxable = subtotal - discount;
-    double tax = taxable * 0.13;
+    double tax = taxable * TAX;
     double total = taxable + tax;
 
-    // TODO (Extract Method, 13.2): everything from here down is one job —
-    //      formatting the report. Pull it out into its own well-named method
-    //      (and the per-item line into a second one).
+    return formatReport(itemNames, itemPrices, customer, premiumCount, subtotal, discount, tax, total);
+  }
+
+  private static String formatReport(String[] itemNames, double[] itemPrices, String customer,
+                              int premiumCount, double subtotal, double discount, double tax, double total) {
     StringBuilder report = new StringBuilder();
     report.append("Order summary for ").append(customer).append("\n");
     report.append("----------------------\n");
-    for (int i = 0; i < itemNames.length; i++) {
-      report.append(String.format(Locale.US, "%s: $%.2f\n", itemNames[i], itemPrices[i]));
-    }
+    addItems(report, itemNames, itemPrices);
     report.append(String.format(Locale.US, "Items: %d\n", itemNames.length));
     report.append(String.format(Locale.US, "Premium items: %d\n", premiumCount));
     report.append(String.format(Locale.US, "Subtotal: $%.2f\n", subtotal));
@@ -96,5 +98,11 @@ public class OrderSummary {
     report.append(String.format(Locale.US, "Tax: $%.2f\n", tax));
     report.append(String.format(Locale.US, "Total: $%.2f", total));
     return report.toString();
+  }
+
+  private static void addItems(StringBuilder report, String[] itemNames, double[] itemPrices) {
+    for (int i = 0; i < itemNames.length; i++) {
+      report.append(String.format(Locale.US, "%s: $%.2f\n", itemNames[i], itemPrices[i]));
+    }
   }
 }
