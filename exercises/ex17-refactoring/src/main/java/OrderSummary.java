@@ -56,22 +56,11 @@ public class OrderSummary {
    * @return the formatted summary, with lines separated by {@code \n}
    */
   public static String summarize(String customer, String[] itemNames, double[] itemPrices) {
-    // TODO (Slide Statements, 13.6): these three declarations are a long way from
-    //      the code that first uses them. Slide each one down to its first use.
-    double subtotal = 0.0;
-    int premiumCount = 0;
+
+    double subtotal = getSubtotal(itemPrices);
+    int premiumCount = getPremiumCount(itemPrices);
+
     double discount = 0.0;
-
-    // TODO (Split Loop, 13.5): this single loop does two unrelated jobs —
-    //      accumulating the subtotal and counting premium items. Split it into
-    //      two loops, then consider Extract Method (13.2) on each one.
-    for (int i = 0; i < itemPrices.length; i++) {
-      subtotal += itemPrices[i];
-      if (itemPrices[i] >= 100.0) {
-        premiumCount++;
-      }
-    }
-
     int DISCOUNT_MIN = 200;
     double DISCOUNT = 0.10;
     if (subtotal > DISCOUNT_MIN) {
@@ -83,6 +72,24 @@ public class OrderSummary {
     double total = taxable + tax;
 
     return formatReport(itemNames, itemPrices, customer, premiumCount, subtotal, discount, tax, total);
+  }
+
+  private static double getSubtotal(double[] itemPrices) {
+    double subtotal = 0.0;
+    for (int i = 0; i < itemPrices.length; i++) {
+      subtotal += itemPrices[i];
+    }
+    return subtotal;
+  }
+
+  private static int getPremiumCount(double[] itemPrices) {
+    int premiumCount = 0;
+    for (int i = 0; i < itemPrices.length; i++) {
+      if (itemPrices[i] >= 100.0) {
+        premiumCount++;
+      }
+    }
+    return premiumCount;
   }
 
   private static String formatReport(String[] itemNames, double[] itemPrices, String customer,
